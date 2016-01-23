@@ -76,7 +76,6 @@ trim_length=`echo "$first_length - $fade_length" | bc`
 # Get crossfade section from first file and optionally do the fade out
 echo "Obtaining $fade_length seconds of fade out portion from $first_file..."
 $SOX "$first_file" -e signed-integer -b 16 fadeout1.wav trim $trim_length
-echo "AAA Status", $?
 
 # When user specifies "auto" try to guess if a fadeout is needed.
 # "RMS amplitude" from the stat effect is effectively an average
@@ -95,13 +94,10 @@ if [ "$fade_first" == "auto" ]; then
 fi
 
 $SOX fadeout1.wav fadeout2.wav $fade_first_opts
-echo "BBB Status", $?
-echo "sox ", fadeout1.wav, fadeout2.wav, $fade_first_opts
 
 # Get the crossfade section from the second file and optionally do the fade in
 echo "Obtaining $fade_length seconds of fade in portion from $second_file..."
 $SOX "$second_file" -e signed-integer -b 16 fadein1.wav trim 0 $fade_length
-echo "CCC Status", $?
 
 # For auto, do similar thing as for fadeout.
 if [ "$fade_second" == "auto" ]; then
@@ -116,27 +112,21 @@ if [ "$fade_second" == "auto" ]; then
 fi
 
 $SOX fadein1.wav fadein2.wav $fade_second_opts
-echo "XXX Status", $?
-echo "sox ", fadeout1.wav, fadeout2.wav, $fade_second_opts
 
 # Mix the crossfade files together at full volume
 echo "Crossfading..."
 $SOX -m -v 1.0 fadeout2.wav -v 1.0 fadein2.wav crossfade.wav
-echo "DDD Status", $?
 
 echo "Trimming off crossfade sections from original files..."
 
 echo "Trim first"
 $SOX "$first_file" -e signed-integer -b 16 song1.wav trim 0 $trim_length
-echo "EEE Status", $?
 
 echo "Trim second"
 $SOX "$second_file" -e signed-integer -b 16 song2.wav trim $fade_length
-echo "FFF Status", $?
 
 echo "concat"
 $SOX song1.wav crossfade.wav song2.wav mix.wav
-echo "GGG Status", $?
 
 echo -e "Removing temporary files...\n" 
 rm fadeout1.wav fadeout2.wav fadein1.wav fadein2.wav crossfade.wav song1.wav song2.wav
