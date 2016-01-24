@@ -38,7 +38,7 @@ def makeMix(plsName, transitionTimes) :
         call(["mv","mix.wav","old.wav"])
         nextType = getType(path)
 
-        if nextType in ["flac","wma"] :
+        if nextType in ["flac","wma","m4a"] :
             tmp = "./tmp.wav"
             tmp2 = "./tmp2.wav"
             call(["rm",tmp])
