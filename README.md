@@ -13,6 +13,7 @@ I wanted to sequence a bunch of mp3s and other audio files together into a singl
 The playlist file contains the full path to the music files. 
 
 2)
+
     python makelist.py MYPLAYLIST.pls "1,1,2,3,5,8,13"
     
 makelist reads the playlist file (MYPLAYLIST.pls) and then calls avconv and sox (make sure you have them installed on your machine) via the included [crossfade_cat.sh](https://github.com/jacksonh/sox/blob/master/scripts/crossfade_cat.sh) shell-script (originally from the sox site).
